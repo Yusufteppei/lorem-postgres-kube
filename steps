@@ -1,0 +1,14 @@
+1. Test ssh connection
+2. Create new key-pair
+3. Copy public key into all servers and assign host names
+4. Setup an ansible directory with a config file
+5. Install kubernetes dependencies on servers via ansible
+6. Write deployment for postgres
+7. Write load balancer config for postgres
+8. Include Prometheus Container
+9.  
+
+
+
+
+

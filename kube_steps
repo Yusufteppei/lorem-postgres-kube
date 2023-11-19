@@ -1,0 +1,20 @@
+--- on all nodes
+swap off
+install curl, docker, software-properties-common
+add k8s apt repo key
+add k8s repo - sudo apt-add-repository "deb http://apt.kubernetes.io/ kubernetes-xenial main"
+update apt
+install kubelet kubeadm kubectl kubernetes-cni using apt
+
+--- on master node
+initialize cluster - kubeadm init
+copy kubernetes config to home - /etc/kubernetes/admin.conf -> $HOME/.kube/config
+--- on worker nodes
+
+join cluster using given token and hash from master init
+
+
+--- master
+
+apply calico pod networking configuration to cluster
+

@@ -1,0 +1,6 @@
+[worker_nodes]
+node1
+node2
+
+[master_nodes]
+master

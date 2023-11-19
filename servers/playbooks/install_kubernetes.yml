@@ -1,0 +1,58 @@
+- hosts: all
+  become: true
+  vars:
+    kube_version: ""
+    cni_version: ""
+  
+  tasks:
+
+
+    - name: update apt repo
+      apt:
+        update_cache: yes
+    
+    - name: Install necessary packages
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - docker.io
+        - apt-transport-https
+        - curl
+        - lsb-release
+
+    - name: Add Kubernetes apt repository key
+      apt_key:
+        url: "https://packages.cloud.google.com/apt/doc/apt-key.gpg"
+        state: present
+
+    - name: Add Kubernetes apt repository
+      apt_repository:
+        repo: "deb http://apt.kubernetes.io/ kubernetes-xenial main"
+        state: present
+
+    - name: Install Kubernetes components
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - kubelet={{ kube_version }}
+        - kubeadm={{ kube_version }}
+        - kubectl={{ kube_version }}
+
+    - name: Disable swap
+      command: swapoff -a
+      ignore_errors: yes
+
+    - name: Install Calico CNI
+      command: kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+
+    - name: Set up kubeconfig for root user
+      command: export KUBECONFIG=/etc/kubernetes/admin.conf
+
+- hosts: master
+  become: true
+  tasks:
+
+    - name: Initialize Kubernetes Master
+      command: kubeadm init
